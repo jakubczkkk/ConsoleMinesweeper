@@ -9,14 +9,18 @@ namespace ConsoleMinesweeper
 
         public static int Width = 9;
         public static int Height = 9;
-        public static int NumerOfMines = 10;
+        public static int NumerOfMines = 5;
 
         public int CurrentMines;
+
+        public GameState CurrentGameState;
 
         public Field[,] Fields = new Field[Width, Height];
 
         public Board()
         {
+            CurrentGameState = InGame;
+
             for (var i = 0; i < Width; ++i)
             {
                 for (var j = 0; j < Height; ++j)
@@ -153,6 +157,23 @@ namespace ConsoleMinesweeper
                 }
             }
             PrintBoard();
+        }
+
+        public void MarkMine(int x, int y)
+        {
+
+            x--; y--;
+            
+            if (!Fields[x, y].IsMine)
+            {
+                GameState.IsPlaying = false;   
+            }
+            else
+            {
+                CurrentMines--;
+                Fields[x, y].IsMarked = true;
+            }
+
         }
 
     }

@@ -6,6 +6,7 @@ namespace ConsoleMinesweeper
 
         public bool IsMine { get; set; }
         public bool IsHidden { get; set; }
+        public bool IsMarked { get; set; }
         public int NearbyMines { get; set; }
 
         public Field()
@@ -20,6 +21,10 @@ namespace ConsoleMinesweeper
             if (IsHidden)
             {
                 return ".";
+            }
+            else if (IsMarked)
+            {
+                return "M";
             }
             else if (IsMine)
             {
