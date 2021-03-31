@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using static ConsoleMinesweeper.GameState;
 
 namespace ConsoleMinesweeper
 {
@@ -9,10 +10,8 @@ namespace ConsoleMinesweeper
 
         public static int Width = 9;
         public static int Height = 9;
-        public static int NumerOfMines = 5;
-
+        public static int NumerOfMines = 10;
         public int CurrentMines;
-
         public GameState CurrentGameState;
 
         public Field[,] Fields = new Field[Width, Height];
@@ -20,7 +19,7 @@ namespace ConsoleMinesweeper
         public Board()
         {
             CurrentGameState = InGame;
-
+            CurrentMines = NumerOfMines;
             for (var i = 0; i < Width; ++i)
             {
                 for (var j = 0; j < Height; ++j)
@@ -29,10 +28,9 @@ namespace ConsoleMinesweeper
                 }
             }
 
-            int remainingMines = NumerOfMines;
-            CurrentMines = remainingMines;
             Random rnd = new Random();
-            while (remainingMines > 0)
+            int remainingMinesToPlace = NumerOfMines;
+            while (remainingMinesToPlace > 0)
             {
                 int x = rnd.Next(Width);
                 int y = rnd.Next(Height);
@@ -40,7 +38,7 @@ namespace ConsoleMinesweeper
                 if (!Fields[x,y].IsMine)
                 {
                     Fields[x, y].IsMine = true;
-                    remainingMines--;
+                    remainingMinesToPlace--;
                     IncrementNearbyMinesCount(x, y);
                 }
                 else
@@ -57,7 +55,7 @@ namespace ConsoleMinesweeper
 
             if (Fields[x, y].IsMine)
             {
-                GameState.IsPlaying = false;
+                CurrentGameState = Lost;
             }
             else if (Fields[x, y].NearbyMines == 0)
             {
@@ -70,7 +68,6 @@ namespace ConsoleMinesweeper
                         {
                             if (Fields[i, j].IsHidden && !(i == x && j== y))
                             {
-                                Console.WriteLine($"Odkrywamy {i+1} {j+1}");
                                 CheckField(i + 1, j + 1);
                             }
                         }
@@ -87,7 +84,7 @@ namespace ConsoleMinesweeper
             }
         }
 
-        public void PrintBoard()
+        public void Print()
         {
 
             StringBuilder widthCoordinates = new StringBuilder();
@@ -111,17 +108,25 @@ namespace ConsoleMinesweeper
             for (var i = 0; i < Width; ++i)
             {
                 Console.Write(i+1);
-                Console.Write(" | ");
+                Console.Write(" |");
+
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write(" ");
                 for (var j = 0; j < Height; ++j)
                 {
-                    Console.Write(Fields[i,j]);
+                    Fields[i,j].Print();
                     Console.Write(" ");
                 }
-                Console.WriteLine("|");
+                Console.ResetColor();
+                Console.Write("| ");
+                Console.Write(i+1);
+                Console.WriteLine();
 
             }
 
             Console.WriteLine(horizontalBorder.ToString());
+            Console.WriteLine(widthCoordinates.ToString());
 
         }
 
@@ -156,7 +161,7 @@ namespace ConsoleMinesweeper
                     Fields[i, j].IsHidden = false;
                 }
             }
-            PrintBoard();
+            Print();
         }
 
         public void MarkMine(int x, int y)
@@ -166,12 +171,13 @@ namespace ConsoleMinesweeper
             
             if (!Fields[x, y].IsMine)
             {
-                GameState.IsPlaying = false;   
+                CurrentGameState = Lost;   
             }
             else
             {
                 CurrentMines--;
                 Fields[x, y].IsMarked = true;
+                Fields[x, y].IsHidden = false;
             }
 
         }

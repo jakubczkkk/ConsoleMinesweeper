@@ -1,3 +1,5 @@
+using System;
+
 namespace ConsoleMinesweeper
 {
 
@@ -16,23 +18,55 @@ namespace ConsoleMinesweeper
             NearbyMines = 0;
         }
 
-        public override string ToString()
+        public void Print()
         {
             if (IsHidden)
             {
-                return ".";
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write(".");
             }
             else if (IsMarked)
             {
-                return "M";
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("M");
             }
             else if (IsMine)
             {
-                return "X";
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("X");
             }
             else
             {
-                return NearbyMines.ToString();
+                if (NearbyMines == 0)
+                {
+                    Console.Write(" ");
+                    return;
+                }
+
+                ConsoleColor fieldConsoleColor; 
+                switch (NearbyMines)
+                {
+                    case 1:
+                        fieldConsoleColor = ConsoleColor.Blue;
+                        break;
+                    case 2:
+                        fieldConsoleColor = ConsoleColor.Green;
+                        break;
+                    case 3:
+                        fieldConsoleColor = ConsoleColor.DarkRed;
+                        break;
+                    case 4:
+                        fieldConsoleColor = ConsoleColor.DarkMagenta;
+                        break;
+                    case 5:
+                        fieldConsoleColor = ConsoleColor.DarkCyan;
+                        break;
+                    default:
+                        fieldConsoleColor = ConsoleColor.Black;
+                        break;
+                }
+                Console.ForegroundColor = fieldConsoleColor;
+                Console.Write(NearbyMines);
             }
         }
 
