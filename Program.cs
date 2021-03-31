@@ -20,16 +20,23 @@ namespace ConsoleMinesweeper
                     $"Number of unchecked mines: {board.CurrentMines}");
                 Console.WriteLine("Enter coordinates (row, column): ");
 
-                string[] input = Console.ReadLine().Split();
-                int x = int.Parse(input[0]);
-                int y = int.Parse(input[1]);
-                if (input.Length == 3 && input[2] == "M")
+                try
                 {
-                    board.MarkMine(x, y);
+                    string[] input = Console.ReadLine().Split();
+                    int x = int.Parse(input[0]);
+                    int y = int.Parse(input[1]);
+                    if (input.Length == 3 && input[2].ToLower() == "m")
+                    {
+                        board.MarkMine(x, y);
+                    }
+                    else
+                    {
+                        board.CheckField(x, y);
+                    }
                 }
-                else
+                catch
                 {
-                    board.CheckField(x, y);
+                    continue;
                 }
 
                 if (board.CurrentMines == 0)
@@ -42,11 +49,12 @@ namespace ConsoleMinesweeper
             Console.Clear();
             board.ShowAllFields();
 
+            Console.WriteLine();
             if (board.CurrentGameState == Won)
             {
                 Console.WriteLine("You won!");
             }
-            else
+            else if (board.CurrentGameState == Lost)
             {
                 Console.WriteLine("You lost! :(");
             }
