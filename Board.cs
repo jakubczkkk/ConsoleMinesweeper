@@ -10,7 +10,7 @@ namespace ConsoleMinesweeper
 
         public static int Width = 9;
         public static int Height = 9;
-        public static int NumerOfMines = 2;
+        public static int NumerOfMines = 10;
         public int CurrentMines;
         public GameState CurrentGameState;
 
