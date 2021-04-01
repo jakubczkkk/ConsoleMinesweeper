@@ -8,6 +8,7 @@ namespace ConsoleMinesweeper
         static void Main(string[] args)
         {
 
+            // initiate board
             var board = new Board();
             
             while (board.CurrentGameState == InGame)
@@ -20,8 +21,11 @@ namespace ConsoleMinesweeper
                     $"Number of unchecked mines: {board.CurrentMines}");
                 Console.WriteLine("Enter coordinates (row, column): ");
 
+                // getting input from user
                 try
                 {
+                    // array input contains chosen by user coordinates (index 0, 1)
+                    // and optional parameter used when user wants to mark field as mine (index 2)
                     string[] input = Console.ReadLine().Split();
                     int x = int.Parse(input[0]);
                     int y = int.Parse(input[1]);

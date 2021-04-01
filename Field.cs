@@ -20,16 +20,21 @@ namespace ConsoleMinesweeper
 
         public void Print()
         {
+            // print hidden field
             if (IsHidden)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.Write(".");
             }
+
+            // print marked mine
             else if (IsMarked)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("M");
             }
+
+            // print mine
             else if (IsMine)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -37,12 +42,14 @@ namespace ConsoleMinesweeper
             }
             else
             {
+                // print field without nearby mines
                 if (NearbyMines == 0)
                 {
                     Console.Write(" ");
                     return;
                 }
 
+                // print field with nearby mines
                 ConsoleColor fieldConsoleColor; 
                 switch (NearbyMines)
                 {

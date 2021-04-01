@@ -11,13 +11,14 @@ namespace ConsoleMinesweeper
         public static int Width = 9;
         public static int Height = 9;
         public static int NumerOfMines = 10;
-        public int CurrentMines;
-        public GameState CurrentGameState;
-
-        public Field[,] Fields = new Field[Width, Height];
+        public int CurrentMines { get; set; }
+        public GameState CurrentGameState { get; set; }
+        public Field[,] Fields { get; set; }
 
         public Board()
-        {
+        {   
+            // initiate board's properties
+            Fields = new Field[Width, Height];
             CurrentGameState = InGame;
             CurrentMines = NumerOfMines;
             for (var i = 0; i < Width; ++i)
@@ -28,6 +29,7 @@ namespace ConsoleMinesweeper
                 }
             }
 
+            // place mines on board
             Random rnd = new Random();
             int remainingMinesToPlace = NumerOfMines;
             while (remainingMinesToPlace > 0)
@@ -53,10 +55,13 @@ namespace ConsoleMinesweeper
         {
             x--; y--;
 
+            // user checks board with mine -> game lost
             if (Fields[x, y].IsMine)
             {
                 CurrentGameState = Lost;
             }
+
+            // show all nearby fields without neighbouring mines
             else if (Fields[x, y].NearbyMines == 0)
             {
                 Fields[x, y].IsHidden = false;
@@ -71,13 +76,14 @@ namespace ConsoleMinesweeper
                                 CheckField(i + 1, j + 1);
                             }
                         }
-                        catch (System.Exception)
+                        catch 
                         {
                             continue;
                         }
                     }
                 }
             }
+
             else 
             {
                 Fields[x, y].IsHidden = false;
@@ -87,29 +93,34 @@ namespace ConsoleMinesweeper
         public void Print()
         {
 
-            StringBuilder widthCoordinates = new StringBuilder();
-            widthCoordinates.Append("    ");
+            // print top coordinates
+            StringBuilder coordinates = new StringBuilder();
+            coordinates.Append("    ");
             for (var i = 1; i <= Width; ++i)
             {
-                widthCoordinates.Append(i);
-                widthCoordinates.Append(" ");
+                coordinates.Append(i);
+                coordinates.Append(" ");
             }
-            Console.WriteLine(widthCoordinates.ToString());
+            Console.WriteLine(coordinates.ToString());
 
-            StringBuilder horizontalBorder = new StringBuilder();
-            horizontalBorder.Append("   ");
+            // print top border
+            StringBuilder border = new StringBuilder();
+            border.Append("   ");
             for (var i = 0; i < 2 * Width + 1; ++i)
             {
-                horizontalBorder.Append("-");
+                border.Append("-");
             }
-
-            Console.WriteLine(horizontalBorder.ToString());
+            Console.WriteLine(border.ToString());
 
             for (var i = 0; i < Width; ++i)
             {
+                // print left coordinates
                 Console.Write(i+1);
+
+                // print left border
                 Console.Write(" |");
 
+                // print fields
                 Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.Write(" ");
@@ -119,14 +130,21 @@ namespace ConsoleMinesweeper
                     Console.Write(" ");
                 }
                 Console.ResetColor();
+
+                // print right border
                 Console.Write("| ");
+
+                //print right coordinates
                 Console.Write(i+1);
                 Console.WriteLine();
 
             }
 
-            Console.WriteLine(horizontalBorder.ToString());
-            Console.WriteLine(widthCoordinates.ToString());
+            // print bottom border
+            Console.WriteLine(border.ToString());
+
+            // print bottom coordinates
+            Console.WriteLine(coordinates.ToString());
 
         }
 
@@ -142,7 +160,7 @@ namespace ConsoleMinesweeper
                     {
                         Fields[i, j].NearbyMines += 1;
                     }
-                    catch (System.Exception)
+                    catch 
                     {
                         continue;
                     }
